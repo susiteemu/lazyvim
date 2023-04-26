@@ -16,3 +16,4 @@ end
 map("n", "<leader>fc", "<cmd>let @+ = expand('%:p')<cr>", {
   desc = "Yank current buffer's absolute path",
 })
+map({ "n", "v" }, "ga.", "<cmd>TextCaseOpenTelescope<CR>", { desc = "Text case conversions" })
