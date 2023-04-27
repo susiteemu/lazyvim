@@ -180,6 +180,7 @@ return {
         "tsx",
         "typescript",
         "vim",
+        "vue",
         "yaml",
       })
     end,
