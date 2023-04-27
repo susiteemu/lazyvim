@@ -168,6 +168,7 @@ return {
       -- add tsx and treesitter
       vim.list_extend(opts.ensure_installed, {
         "bash",
+        "go",
         "html",
         "javascript",
         "json",
@@ -177,6 +178,7 @@ return {
         "python",
         "query",
         "regex",
+        "rust",
         "tsx",
         "typescript",
         "vim",
