@@ -94,6 +94,7 @@ return {
       servers = {
         -- pyright will be automatically installed with mason and loaded with lspconfig
         pyright = {},
+        ansiblels = {},
       },
     },
   },
@@ -224,6 +225,7 @@ return {
         "shellcheck",
         "shfmt",
         "flake8",
+        "ansible-lint"
       },
     },
   },
