@@ -16,4 +16,7 @@ end
 map("n", "<leader>fc", "<cmd>let @+ = expand('%:p')<cr>", {
   desc = "Yank current buffer's absolute path",
 })
+map({ "n", "v" }, "<leader>gf", function()
+  require("telescope.builtin").find_files({ find_command = { "fd", vim.fn.expand("<cword>") } })
+end, { desc = "Find file under cursor" })
 map({ "n", "v" }, "ga.", "<cmd>TextCaseOpenTelescope<CR>", { desc = "Text case conversions" })
