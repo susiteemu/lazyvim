@@ -92,6 +92,7 @@ return {
         pyright = {},
         ansiblels = {},
         arduino_language_server = {},
+        volar = {},
       },
     },
   },
