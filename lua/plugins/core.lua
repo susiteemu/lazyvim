@@ -89,6 +89,7 @@ return {
       ---@type lspconfig.options
       servers = {
         -- pyright will be automatically installed with mason and loaded with lspconfig
+        gopls = {},
         pyright = {},
         ansiblels = {},
         arduino_language_server = {},
