@@ -225,7 +225,7 @@ return {
         "stylua",
         "shellcheck",
         "shfmt",
-        "flake8",
+        "ruff-lsp",
         "ansible-lint",
       },
     },
