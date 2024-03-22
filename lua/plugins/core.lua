@@ -89,7 +89,20 @@ return {
       servers = {
         -- pyright will be automatically installed with mason and loaded with lspconfig
         gopls = {},
-        pyright = {},
+        pyright = {
+          settings = {
+            pyright = {
+              -- Using Ruff's import organizer
+              disableOrganizeImports = true,
+            },
+            python = {
+              analysis = {
+                -- Ignore all files for analysis to exclusively use Ruff for linting
+                ignore = { "*" },
+              },
+            },
+          },
+        },
         ansiblels = {},
         arduino_language_server = {},
         volar = {},
