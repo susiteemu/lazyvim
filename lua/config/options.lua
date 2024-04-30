@@ -52,3 +52,8 @@ vim.opt.wildignore = [[
 */tmp/*,*.so,*.swp,*.zip,**/node_modules/**,**/target/**,**.terraform/**"
 ]]
 vim.opt.wrap = true
+vim.diagnostic.config({
+  float = {
+    border = "rounded",
+  },
+})

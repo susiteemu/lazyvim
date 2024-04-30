@@ -90,6 +90,7 @@ return {
         -- pyright will be automatically installed with mason and loaded with lspconfig
         gopls = {},
         pyright = {
+          mason = false,
           settings = {
             pyright = {
               -- Using Ruff's import organizer
@@ -105,7 +106,8 @@ return {
         },
         ansiblels = {},
         arduino_language_server = {},
-        volar = {},
+        volar = { settings = {} },
+        ruff_lsp = {},
       },
     },
   },
