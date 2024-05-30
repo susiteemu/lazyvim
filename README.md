@@ -22,8 +22,9 @@ This config relies on `ra-multiplex` being installed on your system.
         ```sh
         $ tmux new -d ra-multiplex-server
         ```
-    c. Tmux via Automator:
+    i. Tmux via Automator:
         i. Create a new application with Automator.
         ii. Add a _Run Shell Script_ step to it.
         iii. Add the tmux invocation from the Via Tmux step above to it.
-        iv. Now you can add the newly created 'application' to your Login Items.
+        iv.  Now you can add the newly created 'application' to your Login Items.
+
