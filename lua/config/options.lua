@@ -6,7 +6,7 @@
 vim.opt.conceallevel = 0
 
 -- catppuccin
-vim.g.catppuccin_flavour = "mocha"
+vim.g.catppuccin_flavour = "frappe"
 
 -- lervag/wiki
 vim.g.wiki_root = "~/wiki"
