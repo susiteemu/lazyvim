@@ -30,10 +30,10 @@ return {
   {
     "hrsh7th/nvim-cmp",
     dependencies = { "hrsh7th/cmp-emoji" },
-    ---@param opts cmp.ConfigSchema
-    opts = function(_, opts)
-      table.insert(opts.sources, { name = "emoji" })
-    end,
+    -- -@param opts cmp.ConfigSchema
+    --  opts = function(_, opts)
+    --    table.insert(opts.sources, { name = "emoji" })
+    --  end,
   },
 
   -- change some telescope options and a keymap to browse plugin files
@@ -200,7 +200,7 @@ return {
     end,
   },
   -- then: setup supertab in cmp
-  {
+  --[[{
     "hrsh7th/nvim-cmp",
     dependencies = {
       "hrsh7th/cmp-emoji",
@@ -241,5 +241,5 @@ return {
         end, { "i", "s" }),
       })
     end,
-  },
+  }, ]]
 }

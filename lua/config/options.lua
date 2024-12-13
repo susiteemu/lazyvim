@@ -44,3 +44,6 @@ vim.diagnostic.config({
     border = "rounded",
   },
 })
+
+vim.api.nvim_set_hl(0, "MultiCursor", { fg = "#413c44", bg = "#f9dfdb", bold = true })
+vim.api.nvim_set_hl(0, "MultiCursorMain", { fg = "#413c44", bg = "#f9dfdb", bold = true })
