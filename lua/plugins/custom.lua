@@ -24,6 +24,7 @@ return {
           vim.keymap.set("n", "<leader>cR", "TypescriptRenameFile", { desc = "Rename File", buffer = buffer })
         end)
       end,
+      "saghen/blink.cmp",
     },
     ---@class PluginLspOpts
     opts = {
@@ -90,19 +91,6 @@ return {
       })
     end,
   },
-
-  -- add telescope-fzf-native
-  -- {
-  --   "telescope.nvim",
-  --   dependencies = {
-  --     "nvim-telescope/qq",
-  --     build = "make",
-  --     config = function()
-  --       require("telescope").load_extension("fzf")
-  --       require("telescope").load_extension("notify")
-  --     end,
-  --   },
-  -- },
 
   -- add symbols-outline
   {
@@ -256,7 +244,6 @@ return {
     "johmsalas/text-case.nvim",
     config = function()
       require("textcase").setup({})
-      require("telescope").load_extension("textcase")
     end,
   },
 
