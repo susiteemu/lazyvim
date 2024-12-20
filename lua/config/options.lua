@@ -4,7 +4,6 @@
 
 -- Do not conceal anything
 vim.opt.conceallevel = 0
-
 -- catppuccin
 vim.g.catppuccin_flavour = "mocha"
 

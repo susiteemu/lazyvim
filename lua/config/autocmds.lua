@@ -44,3 +44,35 @@ vim.api.nvim_create_autocmd("CursorHold", {
     vim.diagnostic.open_float(nil, opts)
   end,
 })
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "*",
+  callback = function()
+    vim.wo.number = true
+    vim.wo.relativenumber = false
+  end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "oil",
+  callback = function()
+    vim.wo.number = false
+    vim.wo.relativenumber = false
+  end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "fzf",
+  callback = function()
+    vim.wo.number = false
+    vim.wo.relativenumber = false
+  end,
+})
+
+vim.api.nvim_create_autocmd("BufLeave", {
+  pattern = "oil",
+  callback = function()
+    vim.wo.number = true
+    vim.wo.relativenumber = false
+  end,
+})

@@ -1,3 +1,14 @@
+-- Declare a global function to retrieve the current directory
+function _G.get_oil_winbar()
+  local dir = require("oil").get_current_dir()
+  if dir then
+    return vim.fn.fnamemodify(dir, ":~")
+  else
+    -- If there is no current directory (e.g. over ssh), just show the buffer name
+    return vim.api.nvim_buf_get_name(0)
+  end
+end
+
 return {
   {
     "MeanderingProgrammer/render-markdown.nvim",
@@ -7,7 +18,6 @@ return {
       require("render-markdown").setup({
         file_types = { "markdown", "telekasten" },
       })
-      vim.treesitter.language.register("markdown", "telekasten")
     end,
   },
   { "ziglang/zig.vim" },
@@ -289,5 +299,45 @@ return {
         },
       })
     end,
+  },
+
+  {
+    "stevearc/oil.nvim",
+    config = function()
+      local detail = false
+      require("oil").setup({
+        win_options = { winbar = "%!v:lua.get_oil_winbar()" },
+        view_options = { show_hidden = true },
+        keymaps = {
+          ["gd"] = {
+            desc = "Toggle file detail view",
+            callback = function()
+              detail = not detail
+              if detail then
+                require("oil").set_columns({ "icon", "permissions", "size", "mtime" })
+              else
+                require("oil").set_columns({ "icon" })
+              end
+            end,
+          },
+        },
+      })
+    end,
+    opts = {},
+    dependencies = { { "echasnovski/mini.icons", opts = {} } },
+  },
+  {
+    "ibhagwan/fzf-lua",
+    opts = {
+      oldfiles = {
+        prompt = "❯ ",
+        cwd_only = true,
+        stat_file = true, -- verify files exist on disk
+        -- can also be a lua function, for example:
+        -- stat_file = require("fzf-lua").utils.file_is_readable,
+        -- stat_file = function() return true end,
+        include_current_session = true, -- include bufs from current session
+      },
+    },
   },
 }
