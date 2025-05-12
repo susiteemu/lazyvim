@@ -22,5 +22,7 @@ map({ "n" }, "<tab>", function()
       col = 1,
       backdrop = 90,
     },
+    fzf_opts = { ["--header-lines"] = false },
+    filename_only = true,
   })
 end, { desc = "Show open buffers" })

@@ -34,47 +34,53 @@ return {
           vim.keymap.set("n", "<leader>cR", "TypescriptRenameFile", { desc = "Rename File", buffer = buffer })
         end)
       end,
-      "saghen/blink.cmp",
     },
-    ---@class PluginLspOpts
-    opts = {
-      servers = {
-        gopls = {},
-        pyright = {},
-        ansiblels = {},
-        arduino_language_server = {},
-        volar = { settings = {} },
-        ruff = {},
-        zls = { mason = false },
-        groovyls = { mason = false },
-      },
-      setup = {
-        groovyls = function(_, _)
-          require("lspconfig").groovyls.setup({
-            cmd = { "java", "-jar", vim.env.HOME .. "/bin/groovy-language-server-all.jar" },
-          })
-          return true
-        end,
-        pyright = function()
-          require("lspconfig").pyright.setup({
-            settings = {
-              pyright = {
-                -- Using Ruff's import organizer
-                disableOrganizeImports = true,
-              },
-              python = {
-                analysis = {
-                  -- Ignore all files for analysis to exclusively use Ruff for linting
-                  ignore = { "*" },
-                },
+    opts = function(_, opts)
+      local esp32 = require("esp32")
+
+      -- Ensure tables exist
+      opts.servers = opts.servers or {}
+      opts.setup = opts.setup or {}
+
+      -- Define all your servers
+      opts.servers.gopls = opts.servers.gopls or {}
+      opts.servers.pyright = opts.servers.pyright or {}
+      opts.servers.ansiblels = opts.servers.ansiblels or {}
+      opts.servers.arduino_language_server = opts.servers.arduino_language_server or {}
+      opts.servers.volar = opts.servers.volar or { settings = {} }
+      opts.servers.ruff = opts.servers.ruff or {}
+      opts.servers.zls = opts.servers.zls or { mason = false }
+      opts.servers.groovyls = opts.servers.groovyls or { mason = false }
+
+      -- Override clangd with esp32 config
+      opts.servers.clangd = esp32.lsp_config()
+
+      -- Setup overrides
+      opts.setup.groovyls = function(_, _)
+        require("lspconfig").groovyls.setup({
+          cmd = { "java", "-jar", vim.env.HOME .. "/bin/groovy-language-server-all.jar" },
+        })
+        return true
+      end
+
+      opts.setup.pyright = function()
+        require("lspconfig").pyright.setup({
+          settings = {
+            pyright = {
+              disableOrganizeImports = true,
+            },
+            python = {
+              analysis = {
+                ignore = { "*" },
               },
             },
-          })
-        end,
-      },
-    },
-  },
+          },
+        })
+      end
 
+      return opts
+    end,
+  },
   {
     "nvim-treesitter/nvim-treesitter",
     opts = function(_, opts)
@@ -350,5 +356,42 @@ return {
         section_separators = { left = "", right = "" },
       },
     },
+  },
+  {
+    "ellisonleao/glow.nvim",
+    config = true,
+    cmd = "Glow",
+    opts = { border = "rounded", width_ratio = 0.95, height_ratio = 0.95 },
+  },
+  {
+    "toppair/peek.nvim",
+    event = { "VeryLazy" },
+    build = "deno task --quiet build:fast",
+    config = function()
+      require("peek").setup()
+      vim.api.nvim_create_user_command("PeekOpen", require("peek").open, {})
+      vim.api.nvim_create_user_command("PeekClose", require("peek").close, {})
+    end,
+  },
+  {
+    "zbirenbaum/copilot.lua",
+    opts = {
+      filetypes = {
+        markdown = true,
+        javascript = true,
+        typescript = true,
+        lua = true,
+        go = true,
+        clang = true,
+        c = true,
+        cpp = true,
+        java = true,
+        help = false,
+        ["*"] = false,
+      },
+    },
+  },
+  {
+    "Aietes/esp32.nvim",
   },
 }

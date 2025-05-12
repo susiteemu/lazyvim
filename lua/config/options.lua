@@ -7,6 +7,8 @@ vim.opt.conceallevel = 0
 -- catppuccin
 vim.g.catppuccin_flavour = "mocha"
 
+vim.wo.number = false
+vim.wo.relativenumber = false
 -- pearofducks/ansible-vim
 vim.g.ansible_unindent_after_newline = true
 

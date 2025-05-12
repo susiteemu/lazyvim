@@ -54,7 +54,7 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = "oil",
+  pattern = "oil*",
   callback = function()
     vim.wo.number = false
     vim.wo.relativenumber = false
@@ -76,3 +76,12 @@ vim.api.nvim_create_autocmd("BufLeave", {
     vim.wo.relativenumber = false
   end,
 })
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "markdown", "txt" },
+  callback = function()
+    vim.opt_local.spell = false
+  end,
+})
+
+vim.api.nvim_del_augroup_by_name("lazyvim_wrap_spell")
