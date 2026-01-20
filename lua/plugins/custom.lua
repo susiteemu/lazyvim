@@ -25,19 +25,8 @@ return {
   -- lspconfig
   {
     "neovim/nvim-lspconfig",
-    dependencies = {
-      "jose-elias-alvarez/typescript.nvim",
-      init = function()
-        require("lazyvim.util").lsp.on_attach(function(_, buffer)
-          -- stylua: ignore
-          vim.keymap.set( "n", "<leader>co", "TypescriptOrganizeImports", { buffer = buffer, desc = "Organize Imports" })
-          vim.keymap.set("n", "<leader>cR", "TypescriptRenameFile", { desc = "Rename File", buffer = buffer })
-        end)
-      end,
-    },
+    dependencies = {},
     opts = function(_, opts)
-      local esp32 = require("esp32")
-
       -- Ensure tables exist
       opts.servers = opts.servers or {}
       opts.setup = opts.setup or {}
@@ -49,12 +38,70 @@ return {
       opts.servers.arduino_language_server = opts.servers.arduino_language_server or {}
       opts.servers.volar = opts.servers.volar or { settings = {} }
       opts.servers.ruff = opts.servers.ruff or {}
-      opts.servers.zls = opts.servers.zls or { mason = false }
       opts.servers.groovyls = opts.servers.groovyls or { mason = false }
+      opts.servers.rust_analyzer = opts.servers.rust_analyzer or {}
+      local util = require("lspconfig.util")
 
-      -- Override clangd with esp32 config
-      opts.servers.clangd = esp32.lsp_config()
+      local esp_clangd = vim.fn.expand("$HOME/.espressif/tools/esp-clang/esp-clang/bin/clangd")
+      local ncs_clangd = vim.fn.exepath("clangd")
+      local default_clangd = "clangd"
 
+      -- Detection functions
+      local function is_espidf(root)
+        return vim.fn.filereadable(root .. "/sdkconfig") == 1
+      end
+
+      local function is_zephyr(root)
+        local zephyr_dir = root .. "/build/zephyr"
+        return vim.fn.isdirectory(zephyr_dir) == 1
+      end
+
+      -- Dynamic cmd chooser
+      local function choose_clangd_cmd(root_dir)
+        if is_espidf(root_dir) then
+          return {
+            esp_clangd,
+            "--compile-commands-dir=build",
+            "--background-index",
+            "--clang-tidy",
+            "--header-insertion=iwyu",
+            "--completion-style=detailed",
+            "--function-arg-placeholders",
+            "--fallback-style=llvm",
+          }
+        elseif is_zephyr(root_dir) then
+          return {
+            ncs_clangd,
+            "--compile-commands-dir=build",
+            "--background-index",
+            "--clang-tidy",
+            "--header-insertion=iwyu",
+            "--completion-style=detailed",
+            "--function-arg-placeholders",
+            "--fallback-style=llvm",
+          }
+        else
+          return { default_clangd, "--background-index" }
+        end
+      end
+
+      -- Root dir detection (compile_commands.json or sdkconfig or git)
+      local function detect_root(fname)
+        return util.root_pattern("compile_commands.json", "sdkconfig", ".git")(fname) or vim.fn.getcwd()
+      end
+
+      opts.servers.clangd = {
+        cmd = choose_clangd_cmd(vim.fn.getcwd()),
+        root_dir = detect_root,
+        init_options = {
+          usePlaceholders = true,
+          completeUnimported = true,
+          clangdFileStatus = true,
+        },
+        capabilities = {
+          offsetEncoding = { "utf-16" },
+        },
+      }
       -- Setup overrides
       opts.setup.groovyls = function(_, _)
         require("lspconfig").groovyls.setup({
@@ -117,7 +164,7 @@ return {
   },
 
   {
-    "williamboman/mason.nvim",
+    "mason-org/mason.nvim",
     opts = {
       ui = {
         border = vim.g.border_type,
@@ -330,7 +377,7 @@ return {
       })
     end,
     opts = {},
-    dependencies = { { "echasnovski/mini.icons", opts = {} } },
+    dependencies = { { "nvim-mini/mini.icons", opts = {} } },
   },
   {
     "ibhagwan/fzf-lua",
@@ -372,26 +419,5 @@ return {
       vim.api.nvim_create_user_command("PeekOpen", require("peek").open, {})
       vim.api.nvim_create_user_command("PeekClose", require("peek").close, {})
     end,
-  },
-  {
-    "zbirenbaum/copilot.lua",
-    opts = {
-      filetypes = {
-        markdown = true,
-        javascript = true,
-        typescript = true,
-        lua = true,
-        go = true,
-        clang = true,
-        c = true,
-        cpp = true,
-        java = true,
-        help = false,
-        ["*"] = false,
-      },
-    },
-  },
-  {
-    "Aietes/esp32.nvim",
   },
 }
